@@ -63,20 +63,20 @@ const Checkout = () => {
             });
 
             if (verification.success) {
-              const items = cart.map((item) => ({
-                product_id: item.id,
-                quantity: item.quantity,
-                price: item.price,
-              }));
+        const items = cart.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+          price: item.price,
+        }));
 
-              await orderService.createOrder({
-                items,
-                shipping_address: shippingAddress,
+        await orderService.createOrder({
+          items,
+          shipping_address: shippingAddress,
                 payment_intent_id: verification.paymentId,
-              });
+        });
 
-              clearCart();
-              navigate('/orders', { state: { orderSuccess: true } });
+        clearCart();
+        navigate('/orders', { state: { orderSuccess: true } });
             } else {
               setError('Payment verification failed. Please contact support.');
               setLoading(false);

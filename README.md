@@ -2,6 +2,16 @@
 
 A production-grade full-stack e-commerce application built with React.js, Node.js, Express.js, and PostgreSQL. This project demonstrates modern web development practices and is suitable for internship & fresher hiring evaluations.
 
+## 🌐 Live Demo
+
+- **Frontend:** [https://e-commerce-rishivykuntas-projects.vercel.app](https://e-commerce-rishivykuntas-projects.vercel.app)
+- **Backend API:** [https://ecommerce-backend-rdyq.onrender.com](https://ecommerce-backend-rdyq.onrender.com)
+- **API Health Check:** [https://ecommerce-backend-rdyq.onrender.com/api/health](https://ecommerce-backend-rdyq.onrender.com/api/health)
+
+**Demo Credentials:**
+- **Admin:** admin@example.com / admin123
+- **User:** user@example.com / user123
+
 ## 🚀 Features
 
 ### Core Features
@@ -461,7 +471,12 @@ All prices are displayed in **Indian Rupees (INR)** with the ₹ symbol.
 
 ## 🚀 Deployment
 
-This application is configured for deployment on:
+This application is deployed and live on:
+- **Frontend**: [Vercel](https://e-commerce-rishivykuntas-projects.vercel.app)
+- **Backend**: [Render](https://ecommerce-backend-rdyq.onrender.com)
+- **Database**: Supabase (PostgreSQL)
+
+The application is configured for deployment on:
 - **Frontend**: Vercel
 - **Backend**: Render
 - **Database**: Supabase
