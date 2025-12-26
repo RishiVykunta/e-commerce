@@ -7,7 +7,14 @@ import { loadRazorpay } from '../utils/razorpay';
 const Checkout = () => {
   const { cart, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
-  const [shippingAddress, setShippingAddress] = useState('');
+  const [formData, setFormData] = useState({
+    phone: '',
+    doorNumber: '',
+    street: '',
+    city: '',
+    state: '',
+    pincode: '',
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
@@ -26,12 +33,68 @@ const Checkout = () => {
 
   const total = getCartTotal();
 
+  const isFormValid = () => {
+    const phoneRegex = /^[6-9]\d{9}$/;
+    const pincodeRegex = /^\d{6}$/;
+    return (
+      formData.phone.trim() &&
+      phoneRegex.test(formData.phone.replace(/\s+/g, '')) &&
+      formData.doorNumber.trim() &&
+      formData.street.trim() &&
+      formData.city.trim() &&
+      formData.state.trim() &&
+      formData.pincode.trim() &&
+      pincodeRegex.test(formData.pincode.replace(/\s+/g, ''))
+    );
+  };
+
+  const validateForm = () => {
+    if (!formData.phone.trim()) {
+      setError('Please enter your phone number');
+      return false;
+    }
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(formData.phone.replace(/\s+/g, ''))) {
+      setError('Please enter a valid 10-digit Indian phone number');
+      return false;
+    }
+    if (!formData.doorNumber.trim()) {
+      setError('Please enter door/flat number');
+      return false;
+    }
+    if (!formData.street.trim()) {
+      setError('Please enter street/area name');
+      return false;
+    }
+    if (!formData.city.trim()) {
+      setError('Please enter city');
+      return false;
+    }
+    if (!formData.state.trim()) {
+      setError('Please enter state');
+      return false;
+    }
+    if (!formData.pincode.trim()) {
+      setError('Please enter pincode');
+      return false;
+    }
+    const pincodeRegex = /^\d{6}$/;
+    if (!pincodeRegex.test(formData.pincode.replace(/\s+/g, ''))) {
+      setError('Please enter a valid 6-digit pincode');
+      return false;
+    }
+    return true;
+  };
+
+  const formatShippingAddress = () => {
+    return `${formData.doorNumber}, ${formData.street}, ${formData.city}, ${formData.state} - ${formData.pincode}`;
+  };
+
   const handlePayment = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!shippingAddress.trim()) {
-      setError('Please provide a shipping address');
+    if (!validateForm()) {
       return;
     }
 
@@ -71,8 +134,9 @@ const Checkout = () => {
 
         await orderService.createOrder({
           items,
-          shipping_address: shippingAddress,
-                payment_intent_id: verification.paymentId,
+          shipping_address: formatShippingAddress(),
+          phone_number: formData.phone.replace(/\s+/g, ''),
+          payment_intent_id: verification.paymentId,
         });
 
         clearCart();
@@ -90,10 +154,10 @@ const Checkout = () => {
         prefill: {
           name: 'Customer',
           email: 'customer@example.com',
-          contact: '9999999999',
+          contact: formData.phone.replace(/\s+/g, ''),
         },
         notes: {
-          address: shippingAddress,
+          address: formatShippingAddress(),
         },
         theme: {
           color: '#3399cc',
@@ -145,18 +209,93 @@ const Checkout = () => {
           </div>
         </div>
         <div style={styles.paymentSection}>
-          <h2 style={styles.sectionTitle}>Payment Information</h2>
+          <h2 style={styles.sectionTitle}>Shipping Information</h2>
           <form onSubmit={handlePayment} style={styles.form}>
             <div className="form-group">
-              <label htmlFor="address">Shipping Address *</label>
-              <textarea
-                id="address"
+              <label htmlFor="phone">Phone Number *</label>
+              <input
+                type="tel"
+                id="phone"
                 className="form-control"
-                value={shippingAddress}
-                onChange={(e) => setShippingAddress(e.target.value)}
-                rows="4"
+                value={formData.phone}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  if (value.length <= 10) {
+                    setFormData({ ...formData, phone: value });
+                  }
+                }}
+                placeholder="10-digit mobile number (e.g., 9876543210)"
                 required
-                placeholder="Enter your complete shipping address"
+                maxLength="10"
+                disabled={loading}
+              />
+              <small style={{ color: 'var(--text-light)', fontSize: '12px' }}>
+                Enter 10-digit Indian mobile number (starts with 6, 7, 8, or 9)
+              </small>
+            </div>
+            <div className="form-group">
+              <label htmlFor="doorNumber">Door/Flat Number *</label>
+              <input
+                type="text"
+                id="doorNumber"
+                className="form-control"
+                value={formData.doorNumber}
+                onChange={(e) => setFormData({ ...formData, doorNumber: e.target.value })}
+                placeholder="e.g., Flat 101, House No. 123"
+                required
+                disabled={loading}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="street">Street/Area *</label>
+              <input
+                type="text"
+                id="street"
+                className="form-control"
+                value={formData.street}
+                onChange={(e) => setFormData({ ...formData, street: e.target.value })}
+                placeholder="Street name, Area, Locality"
+                required
+                disabled={loading}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="city">City *</label>
+              <input
+                type="text"
+                id="city"
+                className="form-control"
+                value={formData.city}
+                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                placeholder="City name"
+                required
+                disabled={loading}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="state">State *</label>
+              <input
+                type="text"
+                id="state"
+                className="form-control"
+                value={formData.state}
+                onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                placeholder="State name"
+                required
+                disabled={loading}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="pincode">Pincode *</label>
+              <input
+                type="text"
+                id="pincode"
+                className="form-control"
+                value={formData.pincode}
+                onChange={(e) => setFormData({ ...formData, pincode: e.target.value.replace(/\D/g, '') })}
+                placeholder="6-digit pincode (e.g., 560001)"
+                required
+                maxLength="6"
                 disabled={loading}
               />
             </div>
@@ -179,7 +318,7 @@ const Checkout = () => {
               type="submit"
               className="btn btn-primary"
               style={styles.submitButton}
-              disabled={loading || !razorpayLoaded || !shippingAddress.trim()}
+              disabled={loading || !razorpayLoaded || !isFormValid()}
             >
               {loading ? 'Processing...' : `Pay ₹${total.toFixed(2)}`}
             </button>

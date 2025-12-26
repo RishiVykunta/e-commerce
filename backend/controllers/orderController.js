@@ -17,7 +17,7 @@ const getRazorpayInstance = () => {
 
 exports.createOrder = async (req, res) => {
   try {
-    const { items, shipping_address, payment_intent_id } = req.body;
+    const { items, shipping_address, phone_number, payment_intent_id } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ message: 'Order items are required' });
@@ -25,6 +25,15 @@ exports.createOrder = async (req, res) => {
 
     if (!shipping_address) {
       return res.status(400).json({ message: 'Shipping address is required' });
+    }
+
+    if (!phone_number) {
+      return res.status(400).json({ message: 'Phone number is required' });
+    }
+
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(phone_number.replace(/\s+/g, ''))) {
+      return res.status(400).json({ message: 'Please provide a valid 10-digit Indian phone number' });
     }
 
     let totalAmount = 0;
@@ -52,6 +61,7 @@ exports.createOrder = async (req, res) => {
       items: validatedItems,
       total_amount: totalAmount,
       shipping_address,
+      phone_number: phone_number.replace(/\s+/g, ''),
       payment_intent_id,
     });
 

@@ -2,18 +2,18 @@ const pool = require('../config/database');
 
 class Order {
   static async create(orderData) {
-    const { user_id, items, total_amount, shipping_address, payment_intent_id } = orderData;
+    const { user_id, items, total_amount, shipping_address, phone_number, payment_intent_id } = orderData;
 
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
 
       const orderQuery = `
-        INSERT INTO orders (user_id, total_amount, shipping_address, payment_intent_id, status)
-        VALUES ($1, $2, $3, $4, 'placed')
+        INSERT INTO orders (user_id, total_amount, shipping_address, phone_number, payment_intent_id, status)
+        VALUES ($1, $2, $3, $4, $5, 'placed')
         RETURNING *
       `;
-      const orderResult = await client.query(orderQuery, [user_id, total_amount, shipping_address, payment_intent_id]);
+      const orderResult = await client.query(orderQuery, [user_id, total_amount, shipping_address, phone_number, payment_intent_id]);
       const order = orderResult.rows[0];
 
       const orderItems = [];
