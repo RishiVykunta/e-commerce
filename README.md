@@ -459,23 +459,42 @@ All prices are displayed in **Indian Rupees (INR)** with the ₹ symbol.
 - ✅ Triggers for Timestamps
 - ✅ Data Integrity
 
-## 🚀 Deployment Steps
+## 🚀 Deployment
 
-### Backend Deployment (Heroku/Railway/Render)
-1. Set up PostgreSQL database (Heroku Postgres/Railway Postgres)
-2. Update DATABASE_URL in .env
-3. Set environment variables (including Razorpay keys)
-4. Deploy Node.js app
+This application is configured for deployment on:
+- **Frontend**: Vercel
+- **Backend**: Render
+- **Database**: Supabase
 
-### Frontend Deployment (Vercel/Netlify)
-1. Build the frontend: `npm run build`
-2. Set environment variables (including Razorpay Key ID)
-3. Deploy the build folder
+### Quick Deployment Guide
+
+For detailed step-by-step instructions, see **[DEPLOYMENT.md](./DEPLOYMENT.md)**
+
+### Quick Summary
+
+1. **Supabase (Database)**
+   - Create project and get connection string
+   - Run `database/schema.sql` and `database/seed.sql`
+
+2. **Render (Backend)**
+   - Connect GitHub repository
+   - Set root directory: `backend`
+   - Set environment variables (see `backend/env.example`)
+   - Deploy
+
+3. **Vercel (Frontend)**
+   - Import GitHub repository
+   - Set root directory: `frontend`
+   - Set environment variable: `VITE_API_URL` (your Render backend URL)
+   - Deploy
+
+4. **Update CORS**
+   - Update `FRONTEND_URL` in Render with your Vercel URL
 
 **Note:** 
-- Update CORS settings and API URLs for production
-- Set up Razorpay with your production domain
-- Use production Razorpay keys (not test keys)
+- Payment integration (Razorpay) can be set up after deployment
+- All environment variables are documented in `DEPLOYMENT.md`
+- The code is production-ready and will work once environment variables are configured
 
 ## 🧪 Testing
 
