@@ -1,28 +1,28 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+const { Pool } = require("pg");
+require("dotenv").config();
 
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'ecommerce_db',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-pool.on('connect', () => {
-  console.log('✅ Connected to PostgreSQL database');
+pool.on("connect", () => {
+  console.log("✅ Connected to PostgreSQL database");
 });
 
-pool.on('error', (err) => {
-  console.error('❌ Unexpected error on idle client', err);
-  process.exit(-1);
+pool.on("error", (err) => {
+  console.error("❌ Unexpected error on idle client", err);
+  process.exit(1);
 });
 
-pool.query('SELECT NOW()', (err, res) => {
+// Optional: quick startup check
+pool.query("SELECT NOW()", (err, res) => {
   if (err) {
-    console.error('❌ Database connection error:', err);
+    console.error("❌ Database connection error:", err);
   } else {
-    console.log('✅ Database connection successful:', res.rows[0].now);
+    console.log("✅ Database connection successful:", res.rows[0].now);
   }
 });
 
