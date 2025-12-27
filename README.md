@@ -5,6 +5,7 @@ A production-grade full-stack e-commerce application built with React.js, Node.j
 ## 🌐 Live Demo
 
 - **Frontend:** [https://e-commerce-seven-ashen-41.vercel.app](https://e-commerce-seven-ashen-41.vercel.app)
+- ⚠️ First request may take up to 30 seconds due to free-tier cold start.
 - **Backend API:** [https://ecommerce-backend-rdyq.onrender.com](https://ecommerce-backend-rdyq.onrender.com)
 
 **Demo Credentials:**
