@@ -161,9 +161,6 @@ E-commerce/
 │   ├── fix-product-images.sql   # Image URL fixes
 │   └── update-prices-to-inr.sql # Price conversion script
 │
-├── RAZORPAY_SETUP.md           # Razorpay setup guide
-├── SETUP_GUIDE.md              # Detailed setup instructions
-├── HOW_TO_RUN.txt             # Quick start guide
 └── README.md
 ```
 
