@@ -1,6 +1,6 @@
 # 🛍️ Full-Stack E-Commerce Application
 
-A production-grade full-stack e-commerce application built with React.js, Node.js, Express.js, and PostgreSQL. This project demonstrates modern web development practices and is suitable for internship & fresher hiring evaluations.
+A production-grade full-stack e-commerce application built with React.js, Node.js, Express.js, and PostgreSQL. 
 
 ## 🌐 Live Demo
 
